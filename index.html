@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Gato</title>
+</head>
+
+<body>
+    <gato-game></gato-game>
+</body>
+
+<script>
+    class GatoGame extends HTMLElement {
+        constructor() {
+            super();
+        }
+
+        connectedCallback() {
+            //revision de diagonales del gato
+            function verificacionDiagonal() {
+                // independientemente de la longitud del gato, obtengo el arreglo de TODOS los botones
+                let arraybuttons = contenido.children;
+                //el "gane" se obtiene poniendo en fila poniendo en fila continua X o O, 
+                //por le que el numero de elementos continues es = a la raiz cuadrada de la longitud del cuadrado
+                let gane = nocasillas;
+                let ganediagonalsuperiorainferiorx = 0;
+                let ganediagonalsuperiorainferioro = 0;
+                let ganediagonalinferiorasuperiorx = 0;
+                let ganediagonalinferiorasuperioro = 0;
+                let temporalelement;
+                let ganax = false;
+                let ganao = false;
+                let ganevirtual = gane - 1;
+
+                //verificacion diagonal superior a inferior
+                for (let j = 0; j < arraybuttons.length; j++) {
+
+                    temporalelement = arraybuttons[j];
+
+                    if (temporalelement.value === 'X') {
+                        ganediagonalsuperiorainferiorx++;
+                    }
+                    if (temporalelement.value === 'O') {
+                        ganediagonalsuperiorainferioro++;
+                    }
+
+                    j = j + gane;
+
+                }
+
+                //verificacion diagonal superior a inferior
+                for (let k = 0; k < gane; k++) {
+
+                    temporalelement = arraybuttons[ganevirtual];
+
+                    if (temporalelement.value === 'X') {
+                        ganediagonalinferiorasuperiorx++;
+                    }
+                    if (temporalelement.value === 'O') {
+                        ganediagonalinferiorasuperioro++;
+                    }
+
+                    ganevirtual = gane + (ganevirtual - 1);
+
+                }
+
+                //revisiones de simbolos en linea diagonal
+                if (ganediagonalsuperiorainferiorx === gane || ganediagonalinferiorasuperiorx === gane) {
+                    ganax = true;
+                }
+
+                if (ganediagonalsuperiorainferioro === gane || ganediagonalinferiorasuperioro === gane) {
+                    ganao = true;
+                }
+
+                //verificacion si alguno de los dos simbolos gana
+                if (ganax) {
+                    alert('gana X cruzado!');
+                    finJuego();
+                }
+
+                if (ganao) {
+                    alert('gana O cruzado!');
+                    finJuego();
+                }
+
+            }
+
+            //revision horizontal de gato
+            function verificacionHorizontal() {
+                // independientemente de la longitud del gato, obtengo el arreglo de TODOS los botones
+                let arraybuttons = contenido.children;
+                //el "gane" se obtiene poniendo en fila poniendo en fila continua X o O, 
+                //por le que el numero de elementos continues es = a la raiz cuadrada de la longitud del cuadrado
+                let gane = nocasillas;
+                let ganehorizontalx = 0;
+                let ganehorizontalo = 0;
+                let temporalelement;
+                let ganax = false;
+                let ganao = false;
+                let iteracion = 0;
+
+                for (let i = 0; i < gane; i++) {
+                    for (let j = 0; j < gane; j++) {
+                        //el elemento iteracion continua siendo un valor progresivo, independiente a j e i
+                        temporalelement = arraybuttons[iteracion];
+
+                        if (temporalelement.value === 'X') {
+                            ganehorizontalx++;
+                        }
+
+                        if (temporalelement.value === 'O') {
+                            ganehorizontalo++;
+                        }
+
+                        if (ganehorizontalx === gane) {
+                            ganax = true;
+                        }
+
+                        if (ganehorizontalo === gane) {
+                            ganao = true;
+                        }
+
+                        if (ganax || ganao) {
+                            break;
+                        }
+                        iteracion++;
+                    }
+
+                    if (ganax || ganax) {
+                        break;
+                    }
+
+                    ganehorizontalx = 0;
+                    ganehorizontalo = 0;
+
+                }
+                //verificacion si alguno de los dos simbolos gana
+                if (ganax) {
+                    alert('gana X horizontalmente!');
+                    finJuego();
+                }
+
+                if (ganao) {
+                    alert('gana O horizontalmente!');
+                    finJuego();
+                }
+
+            }
+            //revision vertical
+            function verificacionVertical() {
+                // independientemente de la longitud del gato, obtengo el arreglo de TODOS los botones
+                let arraybuttons = contenido.children;
+                //el "gane" se obtiene poniendo en fila poniendo en fila continua X o O, 
+                //por le que el numero de elementos continues es = a la raiz cuadrada de la longitud del cuadrado
+                let gane = nocasillas;
+                let ganemenos1 = gane - 1;
+                let ganeverticalx = 0;
+                let ganeverticalo = 0;
+                let temporalelement;
+                let ganax = false;
+                let ganao = false;
+
+                for (let j = 0; j < gane; j++) {
+
+                    for (let i = j; i < arraybuttons.length; i++) {
+
+                        temporalelement = arraybuttons[i];
+
+                        if (temporalelement.value === 'X') {
+                            ganeverticalx++;
+                        }
+
+                        if (temporalelement.value === 'O') {
+                            ganeverticalo++;
+                        }
+
+                        if (ganeverticalx === gane) {
+                            ganax = true;
+                        }
+
+                        if (ganeverticalo === gane) {
+                            ganao = true;
+                        }
+
+                        if (ganax || ganao) {
+                            break;
+                        }
+
+                        i = i + ganemenos1;
+                    }
+
+                    if (ganax || ganao) {
+                        break
+                    }
+
+                    ganeverticalx = 0;
+                    ganeverticalo = 0;
+
+                }
+                //verificacion si alguno de los dos simbolos gana
+                if (ganax) {
+                    alert('gana X verticalmente!');
+                    finJuego();
+                }
+
+                if (ganao) {
+                    alert('gana O verticalmente!');
+                    finJuego();
+                }
+
+            }
+            //accion fin de juego
+            function finJuego() {
+                let arraybuttons = contenido.children;
+                for (let i = 0; i < arraybuttons.length; i++) {
+                    arraybuttons[i].disabled = true;
+                }
+            }
+            //declaracion del shadow root
+            let shadowRoot = this.attachShadow({
+                mode: 'open'
+            });
+
+            let nocasillas;
+            let valorvalido = true;
+            //solicitud de un numero valido para generar regilla
+            while (valorvalido) {
+
+                nocasillas = prompt("Numero de casillas por lado", 3) || 3;
+                if (typeof nocasillas === 'string') {
+                    nocasillas = parseInt(nocasillas)
+                }
+
+                if (typeof nocasillas === 'number' && nocasillas >= 3) {
+                    valorvalido = false;
+                    break;
+                } else {
+                    alert('elige un numero mayor o igual a 3')
+                }
+            }
+
+            let botones = [];
+            let contenido = document.createElement('div');
+            contenido.id = 'contenedor-btns';
+            contenido.name = 'contenedor-btns';
+            contenido.className = 'contenedor-btns';
+            contenido.style = `display: flex;
+                                background: gray;
+                                width: ${nocasillas}00px;
+                                flex-wrap: wrap;`;
+
+            if (nocasillas != null) {
+
+                for (let i = 0; i < nocasillas; i++) {
+
+                    for (let j = 0; j < nocasillas; j++) {
+                        let virtualbtn = document.createElement('button');
+                        virtualbtn.innerHTML = "";
+                        virtualbtn.id = 'btn_' + i + '_' + j;
+                        virtualbtn.name = 'btn_' + i + '_' + j;
+                        virtualbtn.value = "";
+                        virtualbtn.className = 'botones';
+                        virtualbtn.style = ` width: 100px; `;
+
+                        virtualbtn.addEventListener("click", function() {
+
+                            let elementoset = this.id;
+                            let nuevovalor = prompt("Elige valor O ó X", "");
+                            let casilla;
+
+                            if (nuevovalor === "o" || nuevovalor === "O") {
+                                this.value = "O";
+                                this.innerText = "O";
+                                this.disabled = true;
+                                verificacionHorizontal();
+                                verificacionVertical();
+                                verificacionDiagonal();
+
+                            } else if (nuevovalor === "x" || nuevovalor === "X") {
+                                this.value = "X";
+                                this.innerText = "X";
+                                this.disabled = true;
+                                verificacionHorizontal();
+                                verificacionVertical();
+                                verificacionDiagonal()
+                            } else {
+                                alert('valor no valido');
+                            }
+
+                        });
+
+                        botones.push(virtualbtn);
+                        contenido.appendChild(virtualbtn);
+
+                    }
+
+                }
+
+            }
+
+            shadowRoot.appendChild(contenido);
+
+        }
+
+        disconnectedCallback() {
+            console.log('disconnected!');
+        }
+
+        attributeChangedCallback(name, oldVal, newVal) {
+            console.log(`Attribute: ${name} changed!`);
+        }
+    }
+
+    window.customElements.define('gato-game', GatoGame);
+</script>
+
+</html>
